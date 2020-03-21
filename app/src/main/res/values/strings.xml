@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">QuizTest</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="play">PLAY</string>
+    <string name="quiz">QUIZ</string>
+    <string-array name="categoriesList">
+        <item>General knowleadge</item>
+        <item>Mythology</item>
+        <item>Mythology</item>
+        <item>Mythology</item>
+        <item>Mythology</item>
+        <item>Mythology</item>
+    </string-array>
 </resources>
