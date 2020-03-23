@@ -15,24 +15,27 @@
             app:destination="@id/questionsFragemnt" />
     </fragment>
     <fragment
-        android:id="@+id/questionsFragemnt"
-        android:name="com.eratoiklio.quiztest.QuestionsFragemnt"
-        android:label="questions_fragemnt"
-        tools:layout="@layout/questions_fragemnt" >
-        <action
-            android:id="@+id/action_questionsFragemnt_to_resultsFragment"
-            app:destination="@id/resultsFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/resultsFragment"
         android:name="com.eratoiklio.quiztest.ResultsFragment"
         android:label="results_fragment"
         tools:layout="@layout/results_fragment" >
         <action
-            android:id="@+id/action_resultsFragment_to_questionsFragemnt"
-            app:destination="@id/questionsFragemnt" />
-        <action
             android:id="@+id/action_resultsFragment_to_titleFragment"
             app:destination="@id/titleFragment" />
+        <action
+            android:id="@+id/action_resultsFragment_to_questionsFragemnt"
+            app:destination="@id/questionsFragemnt" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionsFragemnt"
+        android:name="com.eratoiklio.quiztest.QuestionsFragment"
+        android:label="questions_fragment"
+        tools:layout="@layout/questions_fragment" >
+        <action
+            android:id="@+id/action_questionsFragemnt_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+        <argument
+            android:name="questions"
+            app:argType="com.eratoiklio.quiztest.ApiResponse" />
     </fragment>
 </navigation>
