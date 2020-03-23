@@ -28,21 +28,9 @@ class QuestionsFragemnt : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val pref: SharedPreferences = context!!.getSharedPreferences("ChosenCategory", 0)
-        val i = pref.getInt("categoryId",0)
-        val map: HashMap<String, String> = HashMap()
-        map["amount"] = "10"
-        map["category"] = i.toString()
-        QuestionClient.instance.getProperties(map).enqueue(object: Callback<ApiResponse>{
-            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                Log.e("TEST", t.message)
-            }
-
-            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                Log.e("TEST", response.body()?.toString() ?: "")
-            }
-
-        } )//)
-//        Log.i("QuestionsFragment",i.toString())
+        val args = QuestionsFragmentArgs.fromBundle(arguments!!)
+        //  val pref: SharedPreferences = context!!.getSharedPreferences("ChosenCategory", 0)
+//        val i = pref.getString("questions","")
+        Log.i("QuestionsFragment",args.questions)
     }
 }
