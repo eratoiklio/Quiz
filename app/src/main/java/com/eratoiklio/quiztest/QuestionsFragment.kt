@@ -16,13 +16,14 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.eratoiklio.quiztest.databinding.QuestionsFragmentBinding
 
-private const val BASE_URL = "https://opendb.com/api.php"
-
+private const val QUESTION_UTTERANCE = "question"
+private const val ANSWER_UTTERANCE = "answer"
 class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionListener {
     private lateinit var binding: QuestionsFragmentBinding
     private lateinit var tts: TextToSpeech
     private lateinit var recognizer: SpeechRecognizer
     private lateinit var allQuestions: ApiResponse
+    private var correctAnswerCount = 0
     private var questionNr: Int =0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +45,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     }
 
     private fun askQuestion(question: Question) {
-     tts.speak(question.question, TextToSpeech.QUEUE_FLUSH, null, "test")
+     tts.speak(question.question, TextToSpeech.QUEUE_FLUSH, null, QUESTION_UTTERANCE)
 
         binding.currentQuestion.text = question.question
     }
@@ -64,10 +65,12 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
         tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String?) {
                 Log.e("StartListening", "StartListening")
-                if (utteranceId == "test") {
+                if (utteranceId == QUESTION_UTTERANCE) {
                     activity?.runOnUiThread {
                         recognizer.startListening(intent)
                     }
+                } else if (utteranceId == ANSWER_UTTERANCE){
+                    nextQuestions()
                 }
             }
 
@@ -109,21 +112,29 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     }
 
     override fun onEndOfSpeech() {
-        Toast.makeText(context, "Why you stop?", Toast.LENGTH_SHORT).show()
-        questionNr++
-        if(questionNr< allQuestions.results.size-1)
-        {
-            var currentQuestion = allQuestions.results.get(questionNr)
-            askQuestion(currentQuestion)
-        }
     }
 
     override fun onError(error: Int) {}
 
     override fun onResults(results: Bundle?) {
         val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) ?: return
-        for (text in data) {
-            Log.e("Test", text)
+        var isCorrect = false
+        isCorrect = data.contains(allQuestions.results.get(questionNr).answer)
+        if(isCorrect){
+            correctAnswerCount++
+            tts.speak("That is correct answer", TextToSpeech.QUEUE_FLUSH, null, ANSWER_UTTERANCE)
+        }
+        else{
+            tts.speak("the correct answer is ${allQuestions.results.get(questionNr).answer}", TextToSpeech.QUEUE_FLUSH, null, ANSWER_UTTERANCE)
+        }
+    }
+    private fun nextQuestions()
+    {
+        questionNr++
+        if(questionNr< allQuestions.results.size-1)
+        {
+            var currentQuestion = allQuestions.results.get(questionNr)
+            askQuestion(currentQuestion)
         }
     }
 }
