@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_resultsFragment_to_questionsFragemnt"
             app:destination="@id/questionsFragemnt" />
+        <argument
+            android:name="correctNum"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/questionsFragemnt"

@@ -61,16 +61,12 @@ class TitleFragment : Fragment(), OnItemSelectedListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding.categorySpinner.adapter = adapter
-
-         val pref: SharedPreferences = context!!.getSharedPreferences("ChosenCategory", 0)
-
-        editor = pref.edit()
-
         binding.playBtn.setOnClickListener { view: View ->
 
             val map: HashMap<String, String> = HashMap()
             map["amount"] = "10"
             map["category"] = categoryId.toString()
+            map["encode"] = "base64"
             QuestionClient.instance.getProperties(map).enqueue(object: Callback<ApiResponse> {
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                     Log.e("TEST", t.message)
