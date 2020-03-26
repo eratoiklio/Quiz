@@ -6,11 +6,9 @@ import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.eratoiklio.quiztest.databinding.ResultsFragmentBinding
 
-/**
- * A simple [Fragment] subclass.
- */
 class ResultsFragment : Fragment() {
     private lateinit var binding: ResultsFragmentBinding
     override fun onCreateView(
@@ -27,6 +25,9 @@ class ResultsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val args = ResultsFragmentArgs.fromBundle(arguments!!).correctNum.toString()
         binding.result.text = "${args}/10"
+        binding.againBtn.setOnClickListener{ view : View ->
+            view.findNavController().navigate(ResultsFragmentDirections.actionResultsFragmentToTitleFragment())
+        }
     }
 
     private fun getShareIntent() : Intent {
@@ -54,4 +55,5 @@ class ResultsFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

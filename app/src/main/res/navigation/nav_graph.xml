@@ -36,7 +36,9 @@
         tools:layout="@layout/questions_fragment" >
         <action
             android:id="@+id/action_questionsFragemnt_to_resultsFragment"
-            app:destination="@id/resultsFragment" />
+            app:destination="@id/resultsFragment"
+            app:popUpTo="@id/titleFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="questions"
             app:argType="com.eratoiklio.quiztest.ApiResponse" />
