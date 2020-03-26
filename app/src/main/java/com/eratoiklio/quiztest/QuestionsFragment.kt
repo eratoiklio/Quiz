@@ -13,9 +13,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.eratoiklio.quiztest.databinding.QuestionsFragmentBinding
 import kotlinx.android.synthetic.main.questions_fragment.*
 
@@ -30,6 +33,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     private var correctAnswerCount = 0
     private var questionNr: Int = 0
     private lateinit var currentQuestion: Question
+    private val adapter = ListAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,13 +51,15 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
             return
         }
         allQuestions = args.questions
+        binding.options.adapter = adapter
+        binding.options.layoutManager = LinearLayoutManager(activity)
     }
 
     private fun askQuestion(question: Question) {
         binding.currentQuestion.text = question.question
+        adapter.setOptions(question.options)
+        adapter.notifyDataSetChanged()
         tts.speak(question.question, TextToSpeech.QUEUE_FLUSH, null, QUESTION_UTTERANCE)
-
-
     }
 
     fun initTtsAndRecognition() {
@@ -94,7 +100,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            currentQuestion = allQuestions.results[questionNr].decode64()
+            currentQuestion = allQuestions.results[questionNr].decode64().extend()
             askQuestion(currentQuestion)
         }
     }
@@ -143,7 +149,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     private fun nextQuestion() {
         questionNr++
         if (questionNr < allQuestions.results.size) {
-            currentQuestion = allQuestions.results[questionNr].decode64()
+            currentQuestion = allQuestions.results[questionNr].decode64().extend()
             activity?.runOnUiThread { askQuestion(currentQuestion) }
         } else {
             view?.findNavController()?.navigate(QuestionsFragmentDirections.actionQuestionsFragemntToResultsFragment(correctAnswerCount))
