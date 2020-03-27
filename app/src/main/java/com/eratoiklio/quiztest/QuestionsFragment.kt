@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.questions_fragment.*
 
 private const val QUESTION_UTTERANCE = "question"
 private const val ANSWER_UTTERANCE = "answer"
+private const val ERROR_UTTERANCE = "error"
 
 class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionListener {
     private lateinit var binding: QuestionsFragmentBinding
@@ -34,6 +35,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     private var questionNr: Int = 0
     private lateinit var currentQuestion: Question
     private val adapter = ListAdapter()
+    private var isCorrectCounterFlag = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +61,12 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
         binding.currentQuestion.text = question.question
         adapter.setOptions(question.options)
         adapter.notifyDataSetChanged()
-        tts.speak(question.question, TextToSpeech.QUEUE_FLUSH, null, QUESTION_UTTERANCE)
+        tts.speak(
+            question.question + question.options,
+            TextToSpeech.QUEUE_FLUSH,
+            null,
+            QUESTION_UTTERANCE
+        )
     }
 
     fun initTtsAndRecognition() {
@@ -82,6 +89,8 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
                     }
                 } else if (utteranceId == ANSWER_UTTERANCE) {
                     nextQuestion()
+                } else if (utteranceId == ERROR_UTTERANCE) {
+                    activity?.runOnUiThread { askQuestion(currentQuestion) }
                 }
             }
 
@@ -107,6 +116,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
 
     override fun onReadyForSpeech(params: Bundle?) {
         Toast.makeText(context, "Listening", Toast.LENGTH_SHORT).show()
+        isCorrectCounterFlag = false
     }
 
     override fun onRmsChanged(rmsdB: Float) {}
@@ -125,10 +135,13 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
     }
 
     override fun onError(error: Int) {
-        nextQuestion()
+        tts.speak("Sorry I didn't understand", TextToSpeech.QUEUE_FLUSH, null, ERROR_UTTERANCE)
     }
 
     override fun onResults(results: Bundle?) {
+        if(isCorrectCounterFlag){
+            return
+        }
         val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION) ?: return
         val isCorrect = data.any {
             currentQuestion.answer.trim().toLowerCase() == it.toLowerCase()
@@ -144,6 +157,7 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
                 ANSWER_UTTERANCE
             )
         }
+        isCorrectCounterFlag=!isCorrectCounterFlag
     }
 
     private fun nextQuestion() {
@@ -152,7 +166,11 @@ class QuestionsFragment : Fragment(), TextToSpeech.OnInitListener, RecognitionLi
             currentQuestion = allQuestions.results[questionNr].decode64().extend()
             activity?.runOnUiThread { askQuestion(currentQuestion) }
         } else {
-            view?.findNavController()?.navigate(QuestionsFragmentDirections.actionQuestionsFragemntToResultsFragment(correctAnswerCount))
+            view?.findNavController()?.navigate(
+                QuestionsFragmentDirections.actionQuestionsFragemntToResultsFragment(
+                    correctAnswerCount
+                )
+            )
         }
     }
 }
