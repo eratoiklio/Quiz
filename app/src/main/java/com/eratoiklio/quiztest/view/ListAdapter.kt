@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

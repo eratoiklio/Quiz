@@ -1,7 +1,8 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.eratoiklio.quiztest.R
 
 class MainActivity : AppCompatActivity() {
 

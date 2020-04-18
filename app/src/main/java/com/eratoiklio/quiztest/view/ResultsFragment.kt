@@ -1,12 +1,12 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.eratoiklio.quiztest.R
 import com.eratoiklio.quiztest.databinding.ResultsFragmentBinding
 
 class ResultsFragment : Fragment() {

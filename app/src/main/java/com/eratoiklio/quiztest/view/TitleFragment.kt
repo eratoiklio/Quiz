@@ -1,32 +1,24 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.view
 
 import android.Manifest
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import com.eratoiklio.quiztest.R
+import com.eratoiklio.quiztest.model.Categories
 import com.eratoiklio.quiztest.databinding.TitleFragmentBinding
+import com.eratoiklio.quiztest.viewmodel.TitleViewModel
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.properties.Delegates
 
 private const val RECORD_AUDIO_PERMISSION = 1
 class TitleFragment : Fragment() {
@@ -37,7 +29,8 @@ class TitleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.title_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.title_fragment, container, false)
         viewModel = ViewModelProvider(this).get(TitleViewModel::class.java)
         binding.viewModel = viewModel
         return binding.root
@@ -50,7 +43,8 @@ class TitleFragment : Fragment() {
                 != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                     arrayOf(Manifest.permission.RECORD_AUDIO),
-                    RECORD_AUDIO_PERMISSION)
+                    RECORD_AUDIO_PERMISSION
+                )
             }
         }
     }
@@ -75,7 +69,10 @@ class TitleFragment : Fragment() {
                     binding.playBtn.setEnabled(true)
                 } else {
 
-                    Snackbar.make(binding.root, R.string.app_name, Snackbar.LENGTH_INDEFINITE).setAction(R.string.app_name) {
+                    Snackbar.make(binding.root,
+                        R.string.app_name, Snackbar.LENGTH_INDEFINITE).setAction(
+                        R.string.app_name
+                    ) {
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                         val uri = Uri.fromParts("package", activity?.packageName, null)
                         intent.data = uri

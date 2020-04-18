@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.viewmodel
 
 import android.app.Activity
 import android.content.Context
@@ -12,6 +12,12 @@ import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
+import com.eratoiklio.quiztest.R
+import com.eratoiklio.quiztest.model.ApiResponse
+import com.eratoiklio.quiztest.model.Question
+import com.eratoiklio.quiztest.model.decode64
+import com.eratoiklio.quiztest.model.extend
+import com.eratoiklio.quiztest.view.QuestionsFragmentDirections
 
 
 class QuestionsViewModel : ViewModel(), TextToSpeech.OnInitListener, RecognitionListener {
@@ -101,7 +107,9 @@ class QuestionsViewModel : ViewModel(), TextToSpeech.OnInitListener, Recognition
     }
 
     override fun onError(error: Int) {
-        tts.speak("Sorry I didn't understand", TextToSpeech.QUEUE_FLUSH, null, ERROR_UTTERANCE)
+        tts.speak("Sorry I didn't understand", TextToSpeech.QUEUE_FLUSH, null,
+            ERROR_UTTERANCE
+        )
     }
 
     override fun onResults(results: Bundle?) {
@@ -114,7 +122,9 @@ class QuestionsViewModel : ViewModel(), TextToSpeech.OnInitListener, Recognition
         }
         if (isCorrect) {
             correctAnswerCount++
-            tts.speak("That is correct", TextToSpeech.QUEUE_FLUSH, null, ANSWER_UTTERANCE)
+            tts.speak("That is correct", TextToSpeech.QUEUE_FLUSH, null,
+                ANSWER_UTTERANCE
+            )
         } else {
             tts.speak(
                 "The correct answer is ${currentQuestion.answer}",

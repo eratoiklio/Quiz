@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.model
 
 import android.util.Base64
 import com.google.gson.annotations.SerializedName
@@ -16,7 +16,11 @@ fun Question.decode64(): Question {
     for (option in options) {
         decodedOptions.add(String(Base64.decode(option, Base64.DEFAULT)))
     }
-    return Question(decodedQuestion, decodedAnswer, decodedOptions)
+    return Question(
+        decodedQuestion,
+        decodedAnswer,
+        decodedOptions
+    )
 }
  fun Question.extend(): Question {
      val optionsCount: Int = options.size

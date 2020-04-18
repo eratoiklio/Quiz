@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.viewmodel
 
 import android.util.Log
 import android.view.View
@@ -7,6 +7,10 @@ import android.widget.Spinner
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
+import com.eratoiklio.quiztest.model.Categories
+import com.eratoiklio.quiztest.data.QuestionClient
+import com.eratoiklio.quiztest.model.ApiResponse
+import com.eratoiklio.quiztest.view.TitleFragmentDirections
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

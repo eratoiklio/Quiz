@@ -1,5 +1,6 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.data
 
+import com.eratoiklio.quiztest.model.ApiResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.QueryMap

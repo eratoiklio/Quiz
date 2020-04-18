@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.model
 
 enum class Categories(val id: Int, val displayName: String) {
     HISTORY(23, "History"),

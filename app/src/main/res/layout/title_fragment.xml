@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.eratoiklio.quiztest.TitleViewModel" />
+            type="com.eratoiklio.quiztest.viewmodel.TitleViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/root"

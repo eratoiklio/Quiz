@@ -1,4 +1,4 @@
-package com.eratoiklio.quiztest
+package com.eratoiklio.quiztest.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.eratoiklio.quiztest.viewmodel.QuestionsViewModel
+import com.eratoiklio.quiztest.R
 import com.eratoiklio.quiztest.databinding.QuestionsFragmentBinding
+import com.eratoiklio.quiztest.model.ApiResponse
 
 class QuestionsFragment : Fragment() {
     private lateinit var binding: QuestionsFragmentBinding
@@ -19,7 +22,8 @@ class QuestionsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.questions_fragment, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.questions_fragment, container, false)
         binding.lifecycleOwner = this
         viewModel = ViewModelProvider(this).get(QuestionsViewModel::class.java)
         binding.viewModel = viewModel
